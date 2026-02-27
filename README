@@ -1,0 +1,85 @@
+# PMA Demo Project
+
+## Introduction
+
+This project is a hardware acceleration project based on Xilinx Vitis, focusing on PMA (Packed Memory Array) related kernels and memory management kernels. The project includes host-side code (`real_host.cpp`, `host.cpp`) and kernel code (`pma_kernel`, `memkernel`).
+
+## Tools Used
+
+*   **GNU Make**: Used for building the project.
+*   **Vitis Compiler (`v++`)**: Used for compiling and linking FPGA kernels (HLS/RTL).
+*   **GNU C++ Compiler (`g++`)**: Used for compiling host applications (compiling with C++17 standard).
+*   **Xilinx Vitis Unified Software Platform**: Provides the development environment and runtime libraries.
+
+## Libraries Used
+
+*   **Xilinx XRT (Xilinx Runtime)**:
+    *   `libxrt_core`
+    *   `libxrt_coreutil`
+    *   Headers: `<xrt/xrt_device.h>`, `<xrt/xrt_kernel.h>`, `<xrt/xrt_bo.h>`, etc.
+*   **OpenCL**: `libOpenCL`
+*   **System Libraries**:
+    *   `pthread` (POSIX Threads)
+    *   `rt` (Real-time Extensions)
+    *   `dl` (Dynamic Loader)
+*   **C++ Standard Library**: Uses C++17 standard (`-std=c++17`).
+
+## Compilation Guide
+
+### Environment Variables
+Ensure that Vitis and XRT environment variables are set, such as `XILINX_XRT` and `XILINX_VITIS_HLS`.
+
+### Build FPGA Binary (.xclbin)
+The default target is `hw_emu` (Hardware Emulation).
+
+```bash
+# Build for Software Emulation
+make
+
+# Build for Hardware
+make TARGET=hw
+```
+
+The generated `.xclbin` filename format is typically `$(TARGET)_test_all.xclbin` (e.g., `sw_emu_test_all.xclbin`).
+
+### Build Host Program (real_host)
+
+Use the following command to compile the `real_host` executable:
+
+```bash
+make real_host
+```
+
+This will generate an executable named `real_host`.
+
+## Execution Guide
+
+### Input Requirements
+
+The `real_host` program requires two command-line arguments:
+
+1.  **xclbin File Path**: The compiled FPGA binary file.
+2.  **Graph Data File Path**: A text file containing the graph structure.
+
+**Graph Data File Format**:
+Each line contains three values, separated by spaces:
+```
+<source_vertex> <destination_vertex> <timestamp>
+```
+*   `source_vertex` (int): Source Vertex ID
+*   `destination_vertex` (int): Destination Vertex ID
+*   `timestamp` (long long): Timestamp
+
+### Execution Command
+
+```bash
+./real_host <xclbin_file> <graph_file>
+```
+
+**Example**:
+```bash
+./real_host sw_emu_test_all.xclbin my_graph_data.txt
+```
+
+## Other
+*   `make clean`: Cleans up build artifacts.

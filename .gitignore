@@ -1,0 +1,14 @@
+*
+!*/
+!*.cpp
+!*.h
+!*.hpp
+!*.c
+!makefile
+!Makefile
+!*.cfg
+!*.mk
+_x/
+_X/
+.run/
+*_prj/
